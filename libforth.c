@@ -1876,8 +1876,7 @@ are correct and compatible with this interpreter.
 **forth_make_default** is called to replace any instances of pointers stored
 in registers which are now invalid after we have loaded the file from disk.
 **/
-forth_t *forth_load_core_file(FILE *dump)
-{ 
+forth_t *forth_load_core_file(FILE *dump) { 
 	uint8_t actual[sizeof(header)] = {0},   /* read in header */
 		expected[sizeof(header)] = {0}; /* what we expected */
 	forth_t *o = NULL;
