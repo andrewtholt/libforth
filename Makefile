@@ -16,9 +16,9 @@ DOCS    := ${MDS:%.md=%.htm}
 
 FORTH_FILE = forth.fth
 
-.PHONY: all shorthelp doc clean test profile unit.test forth.test line small fast static
+.PHONY: all forthshared shorthelp doc clean test profile unit.test forth.test line small fast static
 
-all: shorthelp ${TARGET} lib${TARGET}.so ${TARGET}-shared
+all: shorthelp ${TARGET}-small ${TARGET} lib${TARGET}.so 
 
 shorthelp:
 	@${ECHO} "Use 'make help' for a list of all options"
@@ -48,20 +48,23 @@ help:
 	@echo "cc $< -c -o $@"
 	@${CC} ${CFLAGS} $< -c -o $@
 
-# lib${TARGET}.so: lib${TARGET}.o
-
 lib${TARGET}.so: lib${TARGET}.o
 	gcc -shared -o lib${TARGET}.so lib${TARGET}.o
 
 
 lib${TARGET}.a: lib${TARGET}.o
+	@echo $@
 	${AR} rcs $@ $<
 
 ${TARGET}: main.o unit.o lib${TARGET}.a
 	@echo "cc $^ -o $@"
 	@${CC} ${CFLAGS} $^ ${LDFLAGS} -o $@
 
-${TARGET}-shared: main.o unit.o lib${TARGET}.so
+forth-shared: simpleMain.o unit.o lib${TARGET}.so
+	@echo "cc $^ -o $@"
+	@${CC} ${CFLAGS} $^ ${LDFLAGS} -o $@
+
+${TARGET}-small: simpleMain.o lib${TARGET}.a 
 	@echo "cc $^ -o $@"
 	@${CC} ${CFLAGS} $^ ${LDFLAGS} -o $@
 
